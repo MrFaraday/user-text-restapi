@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REST API</title>
+</head>
+<body>
+  <pre>
+POST /auth - выдача токена
+request body:
+{
+  "user": [username]
+}
+response:
+{
+  "access_token": [token],
+  "refreshToken": [refresh_token]
+}
+  </pre>
+  <pre>
+POST /refresh
+request bodyL
+{
+  "refreshToken": [refresh_token]
+}
+Ответ такой же, как и при аутентификации
+  </pre>
+  <pre>
+Дальнейшие запросы должны идти с токеном в заголовке или теле запроса
+  </pre>
+  <pre>
+GET /[user] - имя пользователя для просмотра
+  </pre>
+  <pre>
+GET /users/[page?] - просмотр всех пользователей с их записями, пагинация 3 на страницу
+  </pre>
+</body>
+</html>
