@@ -1,5 +1,3 @@
-// refreshService.js
-
 const refreshTokens = [];
 
 const add = async (user) => {

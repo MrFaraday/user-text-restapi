@@ -25,16 +25,13 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_NAME = process.env.MONGODB_NAME;
 const PORT = process.env.PORT || 5000;
 
-// services
-const authService = require('./src/authService');
-const refreshService = require('./src/refreshService');
-
 // middleware auth
-const authorization = require('./src/autorization');
+const authorization = require('./src/middlewares/autorization');
 
 const app = express();
 const mongoClient = new MongoClient(MONGODB_URI, { useUnifiedTopology: true });
 
+// Подключение к БД
 let dbClient;
 const collections = [];
 app.locals.collections = collections;
@@ -50,6 +47,7 @@ mongoClient.connect((err, client) => {
   });
 });
 
+// Подключение middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -57,90 +55,17 @@ app.get('/', async (req, res) => {
   res.render(`index`);
 });
 
-app.post('/auth', async (req, res) => {
-  const { name } = req.body;
-  const user = await collections['users'].findOne({ name });
+require('./src/routes/login')(app);
 
-  if (!user) {
-    res.status(403).json({ message: 'Incorrect' });
-    return;
-  }
-
-  res.json(await authService.issueToken(user._id));
-});
-
-app.post('/refresh', async (req, res) => {
-  const { refreshToken } = req.body;
-  const user = await refreshService.find(refreshToken);
-  if (!user) {
-    res.status(403).json({ message: 'Wrong token' });
-    return;
-  }
-
-  const userId = user.userId;
-  await refreshService.remove(user);
-  res.json(await authService.issueToken(userId));
-});
-
+// Authorization middleware
 app.use(bearerToken());
-app.use(authorization);
+app.use(authorization());
 
 // /users/ route
-app.get(/^\/users\/[0-9]*$/, async (req, res) => {
-  try {
-    pageFromURL = req.originalUrl.match(/\d\d*/g) || [];  // извлекаем номер страницы, если нет - пустой массив
-    const page = parseInt(pageFromURL[0]) || 1;  // т.к. у null не массив, то вверху присваевам пустой и здесь не ловим ошибку
-    const users_size = await collections['users'].countDocuments();
-
-    // 3 users on page
-    let totalPages = Math.floor(users_size / 3);
-    users_size % 3 === 0 || totalPages++;
-    if (totalPages < page) return res.status(400).json({ message: 'Incorrect page' });
-
-    const users = await collections['users'].find()
-      .skip((page - 1) * 3)
-      .limit(3)
-      .toArray();
-
-    for (const user of users) {
-      const text = await collections['text'].find({ user_id: user._id }).toArray();
-      user.texts = text;
-    }
-
-    res.json({
-      users,
-      page,
-      totalPages,
-      usersCount: users_size
-    });
-  } catch (e) {
-    res.status(500).json({ message: 'Server Error' });
-    console.log(e);
-  }
-});
+require('./src/routes/users')(app);
 
 // /user route
-app.get(/^\/\w\w*$/, async (req, res) => {
-  try {
-    const userName = req.originalUrl.split('/')[1];  // извлекаем имя пользователя
-    const user = await collections['users'].findOne({ name: userName });
-
-    if (!user) {
-      res.status(400).json({ message: 'User not found' });
-      return;
-    }
-
-    const text = await collections['text'].find({ user_id: user._id }).toArray();
-
-    res.json({
-      ...user,
-      text
-    });
-  } catch (e) {
-    res.status(500).json({ message: 'Server Error' });
-    console.log(e);
-  }
-});
+require('./src/routes/user')(app);
 
 // on quit
 process.on("SIGINT", () => {
