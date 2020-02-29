@@ -16,7 +16,8 @@ request body:
 response:
 {
   "access_token": [token],
-  "refreshToken": [refresh_token]
+  "refreshToken": [refresh_token],
+  "expiresIn": [seconds]
 }
   </pre>
   <pre>
@@ -37,7 +38,7 @@ GET /[user] - имя пользователя для просмотра
 GET /users/[page?] - просмотр всех пользователей с их записями, пагинация 3 на страницу
   </pre>
   <pre>
-Данные для теста:
+Данные для проверки:
 Пользователи:
 <i>
 Amory

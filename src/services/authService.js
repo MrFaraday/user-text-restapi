@@ -14,6 +14,7 @@ module.exports = async (userId) => {
 
   return {
     access_token: jwt.sign({ id: userId }, SECRET, { expiresIn: 3600 }),
-    refreshToken: newRefreshToken
+    refreshToken: newRefreshToken,
+    expiresIn: 3600
   }
 }

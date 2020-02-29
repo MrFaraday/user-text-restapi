@@ -33,6 +33,6 @@ module.exports = (app) => {
 
     const userId = user.userId;
     await refreshService.remove(user);
-    res.json(await authService.issueToken(userId));
+    res.json(await issueToken(userId));
   });
 }
