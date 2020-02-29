@@ -13,6 +13,7 @@ module.exports = (app) => {
       if (totalPages < page) return res.status(400).json({ message: 'Incorrect page' });
   
       const users = await collections['users'].find()
+        .project({ password: 0 })
         .skip((page - 1) * 3)
         .limit(3)
         .toArray();

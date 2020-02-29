@@ -4,15 +4,15 @@ module.exports = (app) => {
   app.get(/^\/\w\w*$/, async (req, res) => {
     try {
       const userName = req.originalUrl.split('/')[1];  // извлекаем имя пользователя
-      const user = await collections['users'].findOne({ name: userName });
-  
+      const user = await collections['users'].findOne({ name: userName }, { fields: { password: 0 } });
+
       if (!user) {
         res.status(400).json({ message: 'User not found' });
         return;
       }
-  
+
       const text = await collections['text'].find({ user_id: user._id }).toArray();
-  
+
       res.json({
         ...user,
         text

@@ -55,16 +55,18 @@ app.get('/', async (req, res) => {
   res.render(`index`);
 });
 
+// POST /auth
+// POST /refresh
 require('./src/routes/login')(app);
 
 // Authorization middleware
 app.use(bearerToken());
 app.use(authorization());
 
-// /users/ route
+// GET /users
 require('./src/routes/users')(app);
 
-// /user route
+// GET /user
 require('./src/routes/user')(app);
 
 // on quit

@@ -10,7 +10,8 @@
 POST /auth - выдача токена
 request body:
 {
-  "user": [username]
+  "user": [username],
+  "password": [password]
 }
 response:
 {
@@ -34,6 +35,21 @@ GET /[user] - имя пользователя для просмотра
   </pre>
   <pre>
 GET /users/[page?] - просмотр всех пользователей с их записями, пагинация 3 на страницу
+  </pre>
+  <pre>
+Данные для теста:
+Пользователи:
+<i>
+Amory
+Cicely
+Dante
+Jodi
+Timothy
+</i>
+У всех пароль:
+<i>
+supersecretpassword
+</i>
   </pre>
 </body>
 </html>
