@@ -1,4 +1,4 @@
-const issueToken = require('../services/authService');
+const { issueToken } = require('../services/authService');
 const refreshService = require('../services/refreshService');
 const bcrypt = require('bcryptjs');
 

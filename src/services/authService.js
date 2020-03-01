@@ -5,7 +5,7 @@ process.env.NODE_ENV === 'production' || require('dotenv').config();
 
 const SECRET = process.env.SECRET;
 
-module.exports = async (userId) => {
+const issueToken = async (userId) => {
   const newRefreshToken = uuid();
   refreshService.add({
     token: newRefreshToken,
@@ -18,3 +18,5 @@ module.exports = async (userId) => {
     expiresIn: 3600
   }
 }
+
+module.exports = { issueToken }
