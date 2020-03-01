@@ -19,14 +19,10 @@ const express = require('express');
 const path = require('path');
 process.env.NODE_ENV === 'production' || require('dotenv').config();  // for development
 const { MongoClient } = require('mongodb');
-const bearerToken = require('express-bearer-token');
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_NAME = process.env.MONGODB_NAME;
 const PORT = process.env.PORT || 5000;
-
-// middleware auth
-const authorization = require('./src/middlewares/autorization');
 
 const app = express();
 const mongoClient = new MongoClient(MONGODB_URI, { useUnifiedTopology: true });
@@ -52,21 +48,17 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', async (req, res) => {
-  res.render(`index`);
+  res.render('index');
 });
 
 // POST /auth
 // POST /refresh
 require('./src/routes/login')(app);
 
-// Authorization middleware
-app.use(bearerToken());
-app.use(authorization());
-
 // GET /users
 require('./src/routes/users')(app);
 
-// GET /user
+// GET /:user
 require('./src/routes/user')(app);
 
 // on quit

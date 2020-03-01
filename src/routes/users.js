@@ -1,7 +1,10 @@
+const bearerToken = require('express-bearer-token');
+const authorization = require('../middlewares/autorization');
+
 module.exports = (app) => {
   const collections = app.locals.collections;
 
-  app.get(/^\/users(\/[0-9]*)?$/, async (req, res) => {
+  app.get(/^\/users(\/[0-9]*)?$/, bearerToken(), authorization(), async (req, res) => {
     try {
       pageFromURL = req.originalUrl.match(/\d\d*/g) || [];  // извлекаем номер страницы, если нет - пустой массив
       const page = parseInt(pageFromURL[0]) || 1;  // т.к. у null не массив, то вверху присваевам пустой и здесь не ловим ошибку

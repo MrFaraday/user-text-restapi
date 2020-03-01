@@ -16,7 +16,7 @@ module.exports = () => {
       next();
 
     } catch (e) {
-      res.sendStatus(403).json({ message: 'Forbidden' });
+      res.status(403).json({ message: 'Forbidden' });
     }
   }
 }
