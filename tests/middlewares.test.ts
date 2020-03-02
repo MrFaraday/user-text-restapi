@@ -1,13 +1,15 @@
 // middlewares tests
 
-const jwt = require('jsonwebtoken')
+//const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 jest.mock('jsonwebtoken')
+const verify = <jest.Mock<typeof jwt.verify>>jwt.verify;
 
 describe('Authorization middleware', () => {
 
-  let req
-  let res
-  let next
+  let req: { token?: any; }
+  let res: { status: any; json?: jest.Mock<any, any>; }
+  let next: jest.Mock<any, any>
 
   const authorization = require('../src/middlewares/autorization')
 
@@ -32,7 +34,7 @@ describe('Authorization middleware', () => {
   })
 
   test('Must send status 403 if token are wrong', async () => {
-    jwt.verify.mockImplementation(() => { throw new Error })
+    verify.mockImplementation(() => { throw new Error })
     req.token = 'it\'s wrong token'
 
     await authorization()(req, res, next)
@@ -41,7 +43,7 @@ describe('Authorization middleware', () => {
   })
 
   test('Authorization must pass if token are correct', async () => {
-    jwt.verify.mockReturnValue()
+    verify.mockReset()
     req.token = 'blablabla'
 
     await authorization()(req, res, next)

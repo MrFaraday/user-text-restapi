@@ -21,9 +21,9 @@ describe('issueToken function:', () => {
 
 describe('Refresh service', () => {
 
-  let add
-  let find
-  let remove
+  let add: (arg0: { user_id: string; token: string }) => any
+  let find: (arg0: string) => any
+  let remove: (arg0: { user_id: string; token: string }) => any
 
   beforeEach(() => {
     const refreshService = require('../src/services/refreshService')

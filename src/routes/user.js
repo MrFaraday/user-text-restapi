@@ -4,7 +4,7 @@ const authorization = require('../middlewares/autorization');
 module.exports = (app) => {
   const collections = app.locals.collections;
 
-  app.get(/^\/\w\w*$/, bearerToken(), authorization(), async (req, res) => {
+  app.get(/^\/\w{4,16}$/, bearerToken(), authorization(), async (req, res) => {
     try {
       const userName = req.originalUrl.split('/')[1];  // извлекаем имя пользователя
       const user = await collections['users'].findOne({ name: userName }, { fields: { password: 0 } });

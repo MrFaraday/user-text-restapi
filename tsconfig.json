@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "rootDir": "src",
+    "target": "es6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "outFile": "./dist/app.js",
+    "allowJs": true,
+  },
+  /* "include": [
+    "src/app.js"
+  ], */
+  "files": [
+    "src/app.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
