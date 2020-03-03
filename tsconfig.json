@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-    "module": "system",
+    "module": "commonjs",
     "rootDir": "src",
     "target": "es6",
     "moduleResolution": "node",
+    "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "outFile": "./dist/app.js",
+    /* "outFile": "./build/app.js", */
     "allowJs": true,
+    "outDir": "build",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*"
+      ]
+    }
   },
-  /* "include": [
-    "src/app.js"
-  ], */
-  "files": [
-    "src/app.ts",
-  ],
-  "exclude": [
-    "node_modules"
+  "include": [
+    "src/**/*"
   ]
 }

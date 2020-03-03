@@ -1,17 +1,16 @@
 // middlewares tests
 
-//const jwt = require('jsonwebtoken')
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 jest.mock('jsonwebtoken')
-const verify = <jest.Mock<typeof jwt.verify>>jwt.verify;
+const verify = <jest.Mock<typeof jwt.verify>>jwt.verify
 
 describe('Authorization middleware', () => {
 
-  let req: { token?: any; }
-  let res: { status: any; json?: jest.Mock<any, any>; }
-  let next: jest.Mock<any, any>
+  let req
+  let res
+  let next
 
-  const authorization = require('../src/middlewares/autorization')
+  const authorization = require('../src/middlewares/autorization').authorization
 
   beforeEach(() => {
     jest.resetModules()

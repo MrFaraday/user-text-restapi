@@ -15,54 +15,62 @@
  * API должно быть закрыто bearer авторизацией.
 */
 
-const express = require('express');
-const path = require('path');
-process.env.NODE_ENV === 'production' || require('dotenv').config();  // for development
-const { MongoClient } = require('mongodb');
+import express from 'express'
+import path from 'path'
+import { MongoClient, Collection } from 'mongodb'
 
-const MONGODB_URI = process.env.MONGODB_URI;
-const MONGODB_NAME = process.env.MONGODB_NAME;
-const PORT = process.env.PORT || 5000;
+import { login_route } from './routes/login'
+import { users_route } from './routes/users'
+import { user_route } from './routes/user'
 
-const app = express();
-const mongoClient = new MongoClient(MONGODB_URI, { useUnifiedTopology: true });
+process.env.NODE_ENV === 'production' || require('dotenv').config()  // for development
+const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_NAME = process.env.MONGODB_NAME
+const PORT = process.env.PORT || 5000
+
+const app = express()
+const mongoClient = new MongoClient(MONGODB_URI, { useUnifiedTopology: true })
 
 // Подключение к БД
-let dbClient;
-const collections = [];
-app.locals.collections = collections;
+interface Collections {
+  [key: string]: Collection<any>
+}
+
+let dbClient: MongoClient
+const collections: Collections = {}
+app.locals.collections = collections
 mongoClient.connect((err, client) => {
-  if (err) return console.log(err);
-  dbClient = client;
-  let db = client.db(MONGODB_NAME);
-  collections['users'] = db.collection('users');
-  collections['text'] = db.collection('text');
+  if (err) return console.log(err)
+  dbClient = client
+  let db = client.db(MONGODB_NAME)
+  collections['users'] = db.collection('users')
+  collections['text'] = db.collection('text')
 
   app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`);
-  });
-});
+    console.log(`Listening on ${PORT}`)
+  })
+})
 
 // Подключение middleware
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.json())
+app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('/', async (req, res) => {
-  res.render('index');
-});
+  res.render('index')
+})
 
 // POST /auth
 // POST /refresh
-require('./routes/login')(app);
+login_route(app)
 
 // GET /users
-require('./routes/users')(app);
+users_route(app)
 
 // GET /:user
-require('./routes/user')(app);
+user_route(app)
 
 // on quit
 process.on("SIGINT", () => {
-  dbClient.close();
-  process.exit();
-});
+  dbClient.close()
+  process.exit()
+})

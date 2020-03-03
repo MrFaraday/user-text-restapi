@@ -2,7 +2,7 @@
 
 describe('issueToken function:', () => {
 
-  const { issueToken } = require('../src/services/authService')
+  const issueToken = require('../src/services/authService').default
 
   test('Function must be decladed', () => {
     expect(issueToken).toBeDefined()
@@ -12,8 +12,8 @@ describe('issueToken function:', () => {
     const userId = 'testId'
     expect(await issueToken(userId)).toMatchObject({
       access_token: expect.any(String),
-      refreshToken: expect.any(String),
-      expiresIn: expect.any(Number)
+      refresh_token: expect.any(String),
+      expires_in: expect.any(Number)
     })
   })
 
@@ -21,22 +21,22 @@ describe('issueToken function:', () => {
 
 describe('Refresh service', () => {
 
-  let add: (arg0: { user_id: string; token: string }) => any
-  let find: (arg0: string) => any
-  let remove: (arg0: { user_id: string; token: string }) => any
-
-  beforeEach(() => {
-    const refreshService = require('../src/services/refreshService')
-    add = refreshService.add
-    find = refreshService.find
-    remove = refreshService.remove
-    jest.resetModules()
-  })
+  let add
+  let find
+  let remove
 
   const user = {
     user_id: 'useridtest',
     token: 'refreshtoken'
   }
+
+  beforeEach(() => {
+    const refreshService = require('../src/services/refreshService').default
+    add = refreshService.add
+    find = refreshService.find
+    remove = refreshService.remove
+    jest.resetModules()
+  })
 
   test('Service must add user with token into array and find it by token', async () => {
     await add(user)
