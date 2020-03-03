@@ -1,6 +1,6 @@
 {
   "name": "restapi-user-text",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "REST API on Express",
   "main": "dist/app.js",
   "scripts": {

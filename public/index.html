@@ -21,15 +21,15 @@ request body:
 response:
 {
   "access_token": [token],
-  "refreshToken": [refresh_token],
-  "expiresIn": [seconds]
+  "refresh_token": [refresh_token],
+  "expires_in": [seconds]
 }
   </pre>
   <pre>
 POST /refresh
 request body:
 {
-  "refreshToken": [refresh_token]
+  "refresh_token": [refresh_token]
 }
 Ответ такой же, как и при аутентификации
   </pre>

@@ -19,6 +19,9 @@ process.env.NODE_ENV === 'production' || require('dotenv').config(); // for deve
 const SECRET = process.env.SECRET;
 exports.issueToken = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const newRefreshToken = uuid_1.v4();
+    const user = yield refreshService_1.default.find(userId);
+    if (user)
+        yield refreshService_1.default.remove(user);
     refreshService_1.default.add({
         token: newRefreshToken,
         userId

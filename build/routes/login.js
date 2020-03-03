@@ -31,8 +31,8 @@ exports.login_route = (app) => {
         res.json(yield authService_1.default(user._id));
     }));
     app.post('/refresh', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { refreshToken } = req.body;
-        const user = yield refreshService_1.default.find(refreshToken);
+        const { refresh_token } = req.body;
+        const user = yield refreshService_1.default.find(refresh_token);
         if (!user) {
             res.status(403).json({ message: 'Wrong token' });
             return;

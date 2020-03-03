@@ -8,6 +8,10 @@ const SECRET = process.env.SECRET
 
 export const issueToken = async (userId: string) => {
   const newRefreshToken = uuid()
+  
+  const user = await refreshService.find(userId)
+  if (user) await refreshService.remove(user)
+
   refreshService.add({
     token: newRefreshToken,
     userId

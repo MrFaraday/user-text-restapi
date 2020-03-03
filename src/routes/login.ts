@@ -26,8 +26,8 @@ export const login_route = (app: Application) => {
   })
 
   app.post('/refresh', async (req, res) => {
-    const { refreshToken } = req.body
-    const user = await refreshService.find(refreshToken)
+    const { refresh_token } = req.body
+    const user = await refreshService.find(refresh_token)
     if (!user) {
       res.status(403).json({ message: 'Wrong token' })
       return

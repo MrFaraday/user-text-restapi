@@ -31,7 +31,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const mongodb_1 = require("mongodb");
-//import { login_route } from './routes/login'
+const login_1 = require("./routes/login");
 const users_1 = require("./routes/users");
 const user_1 = require("./routes/user");
 process.env.NODE_ENV === 'production' || require('dotenv').config(); // for development
@@ -62,8 +62,7 @@ app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 // POST /auth
 // POST /refresh
-//login_route(app)
-require('./routes/login').login_route(app);
+login_1.login_route(app);
 // GET /users
 users_1.users_route(app);
 // GET /:user

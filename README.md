@@ -1,3 +1,11 @@
 # REST API on Express and MongoDB
 
-With Bearer authorization
+* REST API
+* Bearer authenticator
+
+### Technologies
+
+* Express
+* MongoDB
+* JWT
+* TypeScript
