@@ -12,7 +12,7 @@
 </head>
 <body>
   <pre>
-POST /auth - выдача токена
+POST /auth/login - выдача токена
 request body:
 {
   "user": [username],
@@ -26,7 +26,7 @@ response:
 }
   </pre>
   <pre>
-POST /refresh
+POST /auth/refresh
 request body:
 {
   "refresh_token": [refresh_token]
@@ -38,10 +38,10 @@ request body:
 токеном в заголовке или теле запроса
   </pre>
   <pre>
-GET /:user - имя пользователя для просмотра
+GET /user/[username] - имя пользователя для просмотра
   </pre>
   <pre>
-GET /users/:page - просмотр всех пользователей
+GET /users[/page] - просмотр всех пользователей
 с их записями, пагинация 3 на страницу
   </pre>
   <pre>
