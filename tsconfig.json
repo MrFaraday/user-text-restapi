@@ -8,7 +8,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    /* "outFile": "./build/app.js", */
     "allowJs": true,
     "outDir": "build",
     "baseUrl": ".",
