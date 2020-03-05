@@ -9,7 +9,7 @@ interface RequestWithToken extends Request {
 }
 
 export const authorization = () => {
-  return async (req: RequestWithToken, res: Response, next: Function) => {
+  return async (req: RequestWithToken, res: Response, next: () => void) => {
     try {
 
       if (!req.token) {

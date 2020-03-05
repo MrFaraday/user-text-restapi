@@ -1,42 +1,48 @@
-import { Application } from 'express'
+import { Request, Response, Router } from 'express'
 import bearerToken from 'express-bearer-token'
 
 import authorization from '../middlewares/autorization'
+import db from '../services/dbService'
+import { request } from 'http'
 
-export const users_route = (app: Application) => {
-  const collections = app.locals.collections
+export const router = Router()
 
-  app.get(/^\/users(\/[0-9]*)?$/, bearerToken(), authorization(), async (req, res) => {
-    try {
-      const page: number = parseInt(req.originalUrl.match(/^\/users(?:\/([0-9]*))?$/)[1]) || 1 // берём страницу изи url или первую, если в url её нет
-      const users_size: number = await collections['users'].countDocuments()
+router.use(bearerToken())
+router.use(authorization())
 
-      // 3 users per page
-      let totalPages = Math.floor(users_size / 3)
-      users_size % 3 === 0 || totalPages++
+router.get(/(\/\d{1,5})?$/, async (req: Request, res: Response) => {
+  try {
+    let page: number = parseInt(req.originalUrl.match(/^\/users(?:\/([0-9]*))?$/)[1], 10) || 1 // берём страницу изи url или первую, если в url её нет
+    page = page > 0 ? page : 1
+    const usersCount: number = await db.collections.users.countDocuments()
 
-      if (totalPages < page) return res.status(400).json({ message: 'Incorrect page' })
+    // 3 users per page
+    let totalPages = Math.floor(usersCount / 3)
+    usersCount % 3 === 0 || totalPages++
 
-      const users = await collections['users'].find()
-        .project({ password: 0 })
-        .skip((page - 1) * 3)
-        .limit(3)
-        .toArray()
+    if (totalPages < page) return res.status(400).json({ message: 'Incorrect page' })
 
-      for (const user of users) {
-        const text = await collections['text'].find({ user_id: user._id }).toArray()
-        user.texts = text
-      }
+    const users = await db.collections.users.find()
+      .project({ password: 0 })
+      .skip((page - 1) * 3)
+      .limit(3)
+      .toArray()
 
-      res.json({
-        users,
-        page,
-        totalPages,
-        usersCount: users_size
-      })
-    } catch (e) {
-      res.status(500).json({ message: 'Server Error' })
-      console.log(e)
+    for (const user of users) {
+      const text = await db.collections.text.find({ user_id: user._id }).toArray()
+      user.texts = text
     }
-  })
-}
+
+    res.json({
+      users,
+      page,
+      total_pages: totalPages,
+      users_count: usersCount
+    })
+  } catch (e) {
+    res.status(500).json({ message: 'Server Error' })
+    console.log(e)
+  }
+})
+
+export default router

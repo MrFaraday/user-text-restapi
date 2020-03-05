@@ -1,16 +1,17 @@
 // Tests for services
 
-describe('issueToken function:', () => {
+import { authenticate, refresh } from '../src/services/authService'
 
-  const issueToken = require('../src/services/authService').default
+describe('authenticate function:', () => {
 
   test('Function must be decladed', () => {
-    expect(issueToken).toBeDefined()
+    expect(authenticate).toBeDefined()
   })
 
   test('Must return response object', async () => {
-    const userId = 'testId'
-    expect(await issueToken(userId)).toMatchObject({
+    const name = 'test'
+    const pass ='test'
+    expect(await authenticate(name, pass)).toMatchObject({
       access_token: expect.any(String),
       refresh_token: expect.any(String),
       expires_in: expect.any(Number)
@@ -19,11 +20,7 @@ describe('issueToken function:', () => {
 
 })
 
-describe('Refresh service', () => {
-
-  let add
-  let find
-  let remove
+/* describe('refresh function', () => {
 
   const user = {
     user_id: 'useridtest',
@@ -50,3 +47,4 @@ describe('Refresh service', () => {
   })
 
 })
+ */
